@@ -33,6 +33,11 @@
             return [];
         }
 
+        function setCookie(name, value) {
+            const encodedValue = encodeURIComponent(JSON.stringify(value));
+            document.cookie = `${name}=${encodedValue}; path=/; max-age=86400`; // 24 hours
+        }
+
         function removeFromCart(index) {
             let cart = getCookie('cart');
             cart.splice(index, 1);
