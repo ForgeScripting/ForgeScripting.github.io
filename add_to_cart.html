@@ -4,27 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart - Test</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+        .cart-item {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+    </style>
 </head>
 <body>
     <h1>Your Cart</h1>
-    <div id="cartContent">
-        <script>
-            // Get form data from URL parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            
-            // Display basic purchase info
-            document.write("<h2>Purchase Details:</h2>");
-            document.write("<p>Package: " + urlParams.get("package") + "</p>");
-            document.write("<p>Minecraft Version: " + urlParams.get("version") + "</p>");
-            document.write("<p>Description: " + urlParams.get("mod-description") + "</p>");
-            
-            // Display selected options
-            document.write("<h2>Selected Options:</h2>");
-            if(urlParams.get("fast-delivery")) document.write("<p>Fast Delivery: Yes</p>");
-            if(urlParams.get("remove-watermark")) document.write("<p>Remove Watermark: Yes</p>");
-            if(urlParams.get("custom-logo-design")) document.write("<p>Custom Logo Design: Yes</p>");
-        </script>
+    <div class="cart-item">
+        <h2>Package Selected:</h2>
+        <p id="package-info">Loading...</p>
     </div>
-    <a href="index.html">Back to Home</a>
+
+    <div class="cart-item">
+        <h2>Options:</h2>
+        <div id="options-info">Loading...</div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            
+            // Display package info
+            document.getElementById('package-info').textContent = 
+                params.get('package') || 'No package selected';
+
+            // Display options
+            let optionsHtml = '';
+            if (params.get('fast-delivery')) optionsHtml += '<p>Fast Delivery</p>';
+            if (params.get('remove-watermark')) optionsHtml += '<p>Remove Watermark</p>';
+            if (params.get('custom-logo-design')) optionsHtml += '<p>Custom Logo</p>';
+            
+            document.getElementById('options-info').innerHTML = 
+                optionsHtml || 'No options selected';
+        };
+    </script>
+
+    <p><a href="index.html">Back to Home</a></p>
 </body>
 </html>
