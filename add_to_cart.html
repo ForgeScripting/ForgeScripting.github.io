@@ -1,3 +1,4 @@
+add_to_cart.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,39 +15,88 @@
             padding: 10px;
             border: 1px solid #ddd;
         }
+        .remove-btn {
+            color: red;
+            cursor: pointer;
+            float: right;
+        }
     </style>
 </head>
 <body>
     <h1>Your Cart</h1>
-    <div class="cart-item">
-        <h2>Package Selected:</h2>
-        <p id="package-info">Loading...</p>
-    </div>
-
-    <div class="cart-item">
-        <h2>Options:</h2>
-        <div id="options-info">Loading...</div>
-    </div>
+    <div id="cart-container"></div>
 
     <script>
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return JSON.parse(decodeURIComponent(parts.pop().split(';').shift()));
+            return [];
+        }
+
+        function setCookie(name, value) {
+            const encodedValue = encodeURIComponent(JSON.stringify(value));
+            document.cookie = `${name}=${encodedValue}; path=/; max-age=86400`; // 24 hours
+        }
+
+        function removeFromCart(index) {
+            let cart = getCookie('cart');
+            cart.splice(index, 1);
+            setCookie('cart', cart);
+            displayCart();
+        }
+
+        function displayCart() {
+            const container = document.getElementById('cart-container');
+            const cart = getCookie('cart');
+            
+            if (cart.length === 0) {
+                container.innerHTML = '<p>Your cart is empty</p>';
+                return;
+            }
+
+            let html = '';
+            cart.forEach((item, index) => {
+                html += `
+                    <div class="cart-item">
+                        <span class="remove-btn" onclick="removeFromCart(${index})">❌</span>
+                        <h2>Package: ${item.package || 'Not specified'}</h2>
+                        <h3>Options:</h3>
+                        <ul>
+                            ${item.fastDelivery ? '<li>Fast Delivery</li>' : ''}
+                            ${item.removeWatermark ? '<li>Remove Watermark</li>' : ''}
+                            ${item.customLogo ? '<li>Custom Logo</li>' : ''}
+                        </ul>
+                        <p>Description: ${item.description || 'No description'}</p>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
         window.onload = function() {
             const params = new URLSearchParams(window.location.search);
             
-            // Display package info
-            document.getElementById('package-info').textContent = 
-                params.get('package') || 'No package selected';
+            if (params.get('package')) {
+                // Add new item to cart
+                const newItem = {
+                    package: params.get('package'),
+                    fastDelivery: params.get('fast-delivery') === 'on',
+                    removeWatermark: params.get('remove-watermark') === 'on',
+                    customLogo: params.get('custom-logo-design') === 'on',
+                    description: params.get('mod-description')
+                };
 
-            // Display options
-            let optionsHtml = '';
-            if (params.get('fast-delivery')) optionsHtml += '<p>Fast Delivery</p>';
-            if (params.get('remove-watermark')) optionsHtml += '<p>Remove Watermark</p>';
-            if (params.get('custom-logo-design')) optionsHtml += '<p>Custom Logo</p>';
-            
-            document.getElementById('options-info').innerHTML = 
-                optionsHtml || 'No options selected';
+                let cart = getCookie('cart');
+                cart.push(newItem);
+                setCookie('cart', cart);
+            }
+
+            displayCart();
         };
     </script>
 
-    <p><a href="index.html">Back to Home</a></p>
+    <p><a href="/index.html">Back to Home</a></p>
+    <p><a href="/services">Add Another Mod</a></p>
 </body>
 </html>
