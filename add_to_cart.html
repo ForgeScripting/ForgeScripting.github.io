@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - Test</title>
+</head>
+<body>
+    <h1>Your Cart</h1>
+    <div id="cartContent">
+        <script>
+            // Get form data from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Display basic purchase info
+            document.write("<h2>Purchase Details:</h2>");
+            document.write("<p>Package: " + urlParams.get("package") + "</p>");
+            document.write("<p>Minecraft Version: " + urlParams.get("version") + "</p>");
+            document.write("<p>Description: " + urlParams.get("mod-description") + "</p>");
+            
+            // Display selected options
+            document.write("<h2>Selected Options:</h2>");
+            if(urlParams.get("fast-delivery")) document.write("<p>Fast Delivery: Yes</p>");
+            if(urlParams.get("remove-watermark")) document.write("<p>Remove Watermark: Yes</p>");
+            if(urlParams.get("custom-logo-design")) document.write("<p>Custom Logo Design: Yes</p>");
+        </script>
+    </div>
+    <a href="/index">Back to Home</a>
+</body>
+</html>
