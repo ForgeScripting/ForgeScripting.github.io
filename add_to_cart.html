@@ -1,10 +1,9 @@
-add_to_cart.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cart - Test</title>
+    <title>Forge Scripting - Add to cart</title>
     <style>
         body {
             font-family: sans-serif;
@@ -23,8 +22,7 @@ add_to_cart.html
     </style>
 </head>
 <body>
-    <h1>Your Cart</h1>
-    <div id="cart-container"></div>
+    <h1>Adding item...</h1>
 
     <script>
         function getCookie(name) {
@@ -37,41 +35,6 @@ add_to_cart.html
         function setCookie(name, value) {
             const encodedValue = encodeURIComponent(JSON.stringify(value));
             document.cookie = `${name}=${encodedValue}; path=/; max-age=86400`; // 24 hours
-        }
-
-        function removeFromCart(index) {
-            let cart = getCookie('cart');
-            cart.splice(index, 1);
-            setCookie('cart', cart);
-            displayCart();
-        }
-
-        function displayCart() {
-            const container = document.getElementById('cart-container');
-            const cart = getCookie('cart');
-            
-            if (cart.length === 0) {
-                container.innerHTML = '<p>Your cart is empty</p>';
-                return;
-            }
-
-            let html = '';
-            cart.forEach((item, index) => {
-                html += `
-                    <div class="cart-item">
-                        <span class="remove-btn" onclick="removeFromCart(${index})">❌</span>
-                        <h2>Package: ${item.package || 'Not specified'}</h2>
-                        <h3>Options:</h3>
-                        <ul>
-                            ${item.fastDelivery ? '<li>Fast Delivery</li>' : ''}
-                            ${item.removeWatermark ? '<li>Remove Watermark</li>' : ''}
-                            ${item.customLogo ? '<li>Custom Logo</li>' : ''}
-                        </ul>
-                        <p>Description: ${item.description || 'No description'}</p>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
         }
 
         window.onload = function() {
@@ -91,12 +54,7 @@ add_to_cart.html
                 cart.push(newItem);
                 setCookie('cart', cart);
             }
-
-            displayCart();
         };
     </script>
-
-    <p><a href="/index.html">Back to Home</a></p>
-    <p><a href="/services">Add Another Mod</a></p>
 </body>
 </html>
