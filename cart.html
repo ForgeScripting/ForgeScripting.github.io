@@ -27,29 +27,43 @@
 
     <script>
         function getCookie(name) {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return JSON.parse(decodeURIComponent(parts.pop().split(';').shift()));
-            return [];
+            try {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) {
+                    const cookieValue = parts.pop().split(';').shift();
+                    return cookieValue ? JSON.parse(decodeURIComponent(cookieValue)) : [];
+                }
+                return [];
+            } catch (e) {
+                console.error('Error parsing cookie:', e);
+                return [];
+            }
         }
 
         function setCookie(name, value) {
-            const encodedValue = encodeURIComponent(JSON.stringify(value));
-            document.cookie = `${name}=${encodedValue}; path=/; max-age=86400`; // 24 hours
+            try {
+                const encodedValue = encodeURIComponent(JSON.stringify(value));
+                document.cookie = `${name}=${encodedValue}; path=/; max-age=86400`; // 24 hours
+            } catch (e) {
+                console.error('Error setting cookie:', e);
+            }
         }
 
         function removeFromCart(index) {
             let cart = getCookie('cart');
-            cart.splice(index, 1);
-            setCookie('cart', cart);
-            displayCart();
+            if (Array.isArray(cart)) {
+                cart.splice(index, 1);
+                setCookie('cart', cart);
+                displayCart();
+            }
         }
 
         function displayCart() {
             const container = document.getElementById('cart-container');
             const cart = getCookie('cart');
             
-            if (cart.length === 0) {
+            if (!Array.isArray(cart) || cart.length === 0) {
                 container.innerHTML = '<p>Your cart is empty</p>';
                 return;
             }
