@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forge Scripting - Buy Mod Making</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1em 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .hero {
+            background-color: #ddd;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .hero a.button {
+            display: inline-block;
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .section h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .card h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 0.5em 0;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Forge Scripting</h1>
+        <nav>
+            <ul>
+                <li><a href="index">Home</a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="contact">Contact</a></li>
+                <li><a href="services">Services</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Minecraft Forge mod making</h1>
+        <p>I will make a Minecraft Forge mod for you.</p>
+    </section>
+
+    <div class="container">
+        <form action="/add_to_cart" method="post"></form>
+        <section class="section">
+            <h2>Select your package</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Basic Package</h3>
+                    <p>This package has: blocks, items, food, armor and tools.</p>
+                    <p>- Max 10 per thing</p>
+                    <p>Done in: 21 days</p>
+                    <p>Price: $40</p>
+                    <input type="radio" id="basic" name="package" value="basic" onchange="updateFastDeliveryInfo()" required>
+                    <label for="basic">Select Basic Package</label>
+                </div>
+                <div class="card">
+                    <h3>Standard Package</h3>
+                    <p>This package has: blocks, items, food, armor, tools, fuids and simple gui (this includes block that open a gui).</p>
+                    <p>- Max 20 per thing</p>
+                    <p>Done in: 45 days</p>
+                    <p>Price: $100</p>
+                    <input type="radio" id="standard" name="package" value="standard" onchange="updateFastDeliveryInfo()" required>
+                    <label for="standard">Select Standard Package</label>
+                </div>
+                <div class="card">
+                    <h3>Premium Package</h3>
+                    <p>This package has: blocks, items, food, armor, tools, fuids, simple gui (this includes block that open a gui), block entity's, effects and scripts.</p>
+                    <p>- Max 45 per thing</p>
+                    <p>Done in: 90 days</p>
+                    <p>Price: $160</p>
+                    <input type="radio" id="premium" name="package" value="premium" onchange="updateFastDeliveryInfo()" required>
+                    <label for="premium">Select Premium Package</label>
+                </div>
+            </div>
+        </section>
+            
+        <section class="section">
+            <h2>Custom Mod Request</h2>
+            <label for="mod-description">Describe your mod idea:</label><br>
+            <textarea id="mod-description" name="mod-description" rows="10" cols="75" placeholder="Enter your mod description here..." required></textarea><br><br>
+            <label for="mod-description">Select your package</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Basic Package</h3>
+                    <p>This package has: blocks, items, food, armor and tools.</p>
+                    <p>- Max 10 per thing</p>
+                    <p>Done in: 21 days</p>
+                    <p>Price: $40</p>
+                    <input type="radio" id="basic" name="package" value="basic" onchange="updateFastDeliveryInfo()" required>
+                    <label for="basic">Select Basic Package</label>
+                </div>
+                <div class="card">
+                    <h3>Standard Package</h3>
+                    <p>This package has: blocks, items, food, armor, tools, fuids and simple gui (this includes block that open a gui).</p>
+                    <p>- Max 20 per thing</p>
+                    <p>Done in: 45 days</p>
+                    <p>Price: $100</p>
+                    <input type="radio" id="standard" name="package" value="standard" onchange="updateFastDeliveryInfo()" required>
+                    <label for="standard">Select Standard Package</label>
+                </div>
+                <div class="card">
+                    <h3>Premium Package</h3>
+                    <p>This package has: blocks, items, food, armor, tools, fuids, simple gui (this includes block that open a gui), block entity's, effects and scripts.</p>
+                    <p>- Max 45 per thing</p>
+                    <p>Done in: 90 days</p>
+                    <p>Price: $160</p>
+                    <input type="radio" id="premium" name="package" value="premium" onchange="updateFastDeliveryInfo()" required>
+                    <label for="premium">Select Premium Package</label>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Extra Options</h2>
+            <p>Would you like fast delivery?</p>
+            <input type="checkbox" id="fast-delivery" name="fast-delivery" value="yes">
+            <label for="fast-delivery">Yes, I want fast delivery (<span id="fast-delivery-info">Error Loading...</span>)</label>
+
+            <p>Would you like to remove ForgeScripting watermark?</p>
+            <input type="checkbox" id="fast-delivery" name="fast-delivery" value="yes">
+            <label for="fast-delivery">Yes, I want to remove ForgeScripting watermark ($100)</label>
+
+            <script>
+                function updateFastDeliveryInfo() {
+                    const packageRadios = document.getElementsByName('package');
+                    let selectedPackage = null;
+
+                    for (const radio of packageRadios) {
+                        if (radio.checked) {
+                            selectedPackage = radio.value;
+                            break;
+                        }
+                    }
+
+                    const fastDeliveryInfo = document.getElementById('fast-delivery-info');
+                    const fastDeliveryCheckbox = document.getElementById('fast-delivery');
+
+                    if (selectedPackage) {
+                        switch (selectedPackage) {
+                            case 'basic':
+                                fastDeliveryInfo.textContent = '$40 for 14 days';
+                                break;
+                            case 'standard':
+                                fastDeliveryInfo.textContent = '$70 for 30 days';
+                                break;
+                            case 'premium':
+                                fastDeliveryInfo.textContent = '$100 for 45 days';
+                                break;
+                            default:
+                                fastDeliveryInfo.textContent = 'Unknown package!';
+                        }
+                    } else {
+                        fastDeliveryInfo.textContent = 'Please select a package!';
+                    }
+                }
+            </script>
+        </section>
+
+        <button type="submit">Submit Request</button>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <footer>
+        <p>&copy; 2025 My Website. All rights reserved.</p>
+    </footer>
+</body>
+</html>
