@@ -256,7 +256,7 @@
                 </div>
 
                 <div class="total-price">
-                    <h3>Total Price: $<span id="total-price">0</span></h3>
+                    <h3>Total Price: <span id="total-price">0</span></h3>
                 </div>
             </section>
 
@@ -264,6 +264,7 @@
         </form>
 
         <script>
+            const moneyType = "€";
             let priceConfig;
 
             async function loadPrices() {
@@ -303,18 +304,18 @@
                     console.debug(basicPrice, standardPrice, premiumPrice, basicPriceFast, standardPriceFast, premiumPriceFast, removeWatermarkPrice, customLogoPrice)
                 
                     // Update package prices
-                    updateElementText('basic-package-info-disc', basicPrice[1] == 0 ? "" : `$${basicPrice[0]}`);
-                    updateElementText('basic-package-info', basicPrice[1] == 0 ? "$" + basicPrice[0] : " $" + basicPrice[1]);
-                    updateElementText('standard-package-info-disc', standardPrice[1] == 0 ? "" : `$${standardPrice[0]}`);
-                    updateElementText('standard-package-info', standardPrice[1] == 0 ? "$" + standardPrice[0] : " $" + standardPrice[1]);
-                    updateElementText('premium-package-info-disc', premiumPrice[1] == 0 ? "" : `$${premiumPrice[0]}`);
-                    updateElementText('premium-package-info', premiumPrice[1] == 0 ? "$" + premiumPrice[0] : " $" + premiumPrice[1]);
+                    updateElementText('basic-package-info-disc', basicPrice[1] == 0 ? "" : `${moneyType}${basicPrice[0]}`);
+                    updateElementText('basic-package-info', basicPrice[1] == 0 ? moneyType + basicPrice[0] : ` ${moneyType}` + basicPrice[1]);
+                    updateElementText('standard-package-info-disc', standardPrice[1] == 0 ? "" : `${moneyType}${standardPrice[0]}`);
+                    updateElementText('standard-package-info', standardPrice[1] == 0 ? moneyType + standardPrice[0] : ` ${moneyType}` + standardPrice[1]);
+                    updateElementText('premium-package-info-disc', premiumPrice[1] == 0 ? "" : `${moneyType}${premiumPrice[0]}`);
+                    updateElementText('premium-package-info', premiumPrice[1] == 0 ? moneyType + premiumPrice[0] : ` ${moneyType}` + premiumPrice[1]);
                 
                     // Update extra options prices
-                    updateElementText('remove-watermark-info-disc', removeWatermarkPrice[1] == 0 ? "" : `$${removeWatermarkPrice[0]}`);
-                    updateElementText('remove-watermark-info', removeWatermarkPrice[1] == 0 ? "$" + removeWatermarkPrice[0] : " $" + removeWatermarkPrice[1]);
-                    updateElementText('custom-logo-design-info-disc', customLogoPrice[1] == 0 ? "" : `$${customLogoPrice[0]}`);
-                    updateElementText('custom-logo-design-info', customLogoPrice[1] == 0 ? "$" + customLogoPrice[0] : " $" + customLogoPrice[1]);
+                    updateElementText('remove-watermark-info-disc', removeWatermarkPrice[1] == 0 ? "" : `${moneyType}${removeWatermarkPrice[0]}`);
+                    updateElementText('remove-watermark-info', removeWatermarkPrice[1] == 0 ? moneyType + removeWatermarkPrice[0] : ` ${moneyType}` + removeWatermarkPrice[1]);
+                    updateElementText('custom-logo-design-info-disc', customLogoPrice[1] == 0 ? "" : `${moneyType}${customLogoPrice[0]}`);
+                    updateElementText('custom-logo-design-info', customLogoPrice[1] == 0 ? moneyType + customLogoPrice[0] : ` ${moneyType}` + customLogoPrice[1]);
                 
                     // Calculate total
                     if (selectedPackage) {
@@ -328,9 +329,9 @@
                         if (fastDeliveryInfo) {
                             let price, days, packageName;
                             switch (selectedPackage.value) {
-                                case 'basic': packageName = "Basic Package"; disc_price = basicPriceFast[1] == 0 ? "" : `$${basicPriceFast[0]}`; price = basicPriceFast[1] == 0 ? "$" + basicPriceFast[0] : " $" + basicPriceFast[1]; days = 14; break;
-                                case 'standard': packageName = "Standard Package"; disc_price = standardPriceFast[1] == 0 ? "" : `$${standardPriceFast[0]}`; price = standardPriceFast[1] == 0 ? "$" + standardPriceFast[0] : " $" + standardPriceFast[1]; days = 30; break;
-                                case 'premium': packageName = "Premium Package"; disc_price = premiumPriceFast[1] == 0 ? "" : `$${premiumPriceFast[0]}`; price = premiumPriceFast[1] == 0 ? "$" + premiumPriceFast[0] : " $" + premiumPriceFast[1]; days = 45; break;
+                                case 'basic': packageName = "Basic Package"; disc_price = basicPriceFast[1] == 0 ? "" : `${moneyType}${basicPriceFast[0]}`; price = basicPriceFast[1] == 0 ? moneyType + basicPriceFast[0] : ` ${moneyType}` + basicPriceFast[1]; days = 14; break;
+                                case 'standard': packageName = "Standard Package"; disc_price = standardPriceFast[1] == 0 ? "" : `${moneyType}${standardPriceFast[0]}`; price = standardPriceFast[1] == 0 ? moneyType + standardPriceFast[0] : ` ${moneyType}` + standardPriceFast[1]; days = 30; break;
+                                case 'premium': packageName = "Premium Package"; disc_price = premiumPriceFast[1] == 0 ? "" : `${moneyType}${premiumPriceFast[0]}`; price = premiumPriceFast[1] == 0 ? moneyType + premiumPriceFast[0] : ` ${moneyType}` + premiumPriceFast[1]; days = 45; break;
                             }
                             updateElementText('fast-delivery-info-disc', disc_price);
                             fastDeliveryInfo.textContent = `${price} for ${days} days for ${packageName}`;
@@ -341,7 +342,7 @@
                     if (removeWatermark) total += removeWatermarkPrice[1] == 0 ? removeWatermarkPrice[0] : removeWatermarkPrice[1];
                     if (customLogo) total += customLogoPrice[1] == 0 ? customLogoPrice[0] : customLogoPrice[1];
                 
-                    updateElementText('total-price', total);
+                    updateElementText('total-price', `${moneyType}${total}`);
                 } catch (error) {
                     console.error('Error updating prices:', error);
                 }
