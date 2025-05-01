@@ -23,10 +23,11 @@
 
         .cart-button {
             position: absolute;
-            top: 50%;
-            right: 20px;
+            top: 30%;
+            right: 0px;
             transform: translateY(-50%);
             cursor: pointer;
+            padding: 20px;
         }
 
         nav ul {
@@ -91,7 +92,6 @@
             border: 1px solid #ddd;
             padding: 15px;
             border-radius: 5px;
-            position: relative;
         }
 
         .card h3 {
@@ -123,7 +123,6 @@
             font-size: 1.2em;
             cursor: pointer;
             margin-top: 20px;
-            width: 100%;
         }
 
         .submit-button:hover {
@@ -139,12 +138,6 @@
             bottom: 0;
             width: 100%;
         }
-
-        .error {
-            color: red;
-            font-size: 0.9em;
-            margin-top: 5px;
-        }
     </style>
 </head>
 <body>
@@ -152,17 +145,13 @@
         <h1>Forge Scripting</h1>
         <nav>
             <ul>
-                <li><a href="../index">Home</a></li>
-                <li><a href="../about">About</a></li>
-                <li><a href="../contact">Contact</a></li>
-                <li><a href="../services">Services</a></li>
+                <li><a href="/home">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/services">Services</a></li>
             </ul>
+            <div class="cart-button"><a href="/cart"><img src="/assets/cart.png" alt="Cart Icon" width="32" height="32"></a></div>
         </nav>
-        <div class="cart-button">
-            <a href="../cart">
-                <img src="../assets/cart.png" alt="Cart Icon" width="32" height="32">
-            </a>
-        </div>
     </header>
 
     <section class="hero">
@@ -171,7 +160,7 @@
     </section>
 
     <div class="container">
-        <form id="modRequestForm" action="../add_to_cart.html" method="get">
+        <form id="modRequestForm" action="/add_to_cart" method="get">
             <section class="section">
                 <h2>Description</h2>
                 <p>I will create a custom Minecraft Forge mod according to your specifications. All textures will be created by me. The mod will include a ForgeScripting watermark, which can be removed for an additional fee.</p>
@@ -179,8 +168,51 @@
 
             <section class="section">
                 <h2>Select your package</h2>
-                <div id="packages-grid" class="grid">
-                    <!-- Packages will be loaded dynamically -->
+                <div class="grid">
+                    <div class="card">
+                        <h3>Basic Package</h3>
+                        <p>This package includes:</p>
+                        <ul>
+                            <li>Blocks</li>
+                            <li>Items</li>
+                            <li>Food</li>
+                            <li>Armor</li>
+                            <li>Tools</li>
+                        </ul>
+                        <p>- Max 10 per category</p>
+                        <p>- Delivery: 21 days</p>
+                        <p>- Price: $40</p>
+                        <input type="radio" id="basic" name="package" value="basic" onchange="updatePricing()" required>
+                        <label for="basic">Select Basic Package</label>
+                    </div>
+                    <div class="card">
+                        <h3>Standard Package</h3>
+                        <p>Everything in Basic, plus:</p>
+                        <ul>
+                            <li>Fluids</li>
+                            <li>Simple GUI</li>
+                            <li>GUI Blocks</li>
+                        </ul>
+                        <p>- Max 20 per category</p>
+                        <p>- Delivery: 40 days</p>
+                        <p>- Price: $100</p>
+                        <input type="radio" id="standard" name="package" value="standard" onchange="updatePricing()" required>
+                        <label for="standard">Select Standard Package</label>
+                    </div>
+                    <div class="card">
+                        <h3>Premium Package</h3>
+                        <p>Everything in Standard, plus:</p>
+                        <ul>
+                            <li>Block Entities</li>
+                            <li>Effects</li>
+                            <li>Custom Scripts</li>
+                        </ul>
+                        <p>- Max 45 per category</p>
+                        <p>- Delivery: 90 days</p>
+                        <p>- Price: $160</p>
+                        <input type="radio" id="premium" name="package" value="premium" onchange="updatePricing()" required>
+                        <label for="premium">Select Premium Package</label>
+                    </div>
                 </div>
             </section>
             
@@ -195,9 +227,8 @@
 
                 <div class="option-group">
                     <h3>Minecraft Version</h3>
-                    <div id="versions-container">
-                        <!-- Versions will be loaded dynamically -->
-                    </div>
+                    <input type="radio" id="v1.20.4" name="version" value="v1.20.4" required>
+                    <label for="v1.20.4">1.20.4</label>
                 </div>
 
                 <div class="option-group">
@@ -216,12 +247,12 @@
 
                 <div class="option-group">
                     <input type="checkbox" id="remove-watermark" name="remove-watermark" onchange="updatePricing()">
-                    <label for="remove-watermark">Remove ForgeScripting watermark</label>
+                    <label for="remove-watermark">Remove ForgeScripting watermark ($100)</label>
                 </div>
 
                 <div class="option-group">
                     <input type="checkbox" id="custom-logo-design" name="custom-logo-design" onchange="updatePricing()">
-                    <label for="custom-logo-design">Custom logo design</label>
+                    <label for="custom-logo-design">Custom logo design ($40)</label>
                 </div>
 
                 <div class="total-price">
@@ -229,66 +260,11 @@
                 </div>
             </section>
 
-            <button type="submit" class="submit-button">Add to Cart</button>
+            <button type="submit" class="submit-button">Submit Request</button>
         </form>
 
         <script>
-            let priceConfig;
-
-            async function loadPrices() {
-                try {
-                    const response = await fetch('../config/prices.json');
-                    priceConfig = await response.json();
-                    populatePackages();
-                    populateVersions();
-                    updateExtraOptions();
-                    updatePricing();
-                } catch (error) {
-                    console.error('Error loading prices:', error);
-                }
-            }
-
-            function populatePackages() {
-                const grid = document.getElementById('packages-grid');
-                Object.entries(priceConfig.packages).forEach(([key, package]) => {
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    card.innerHTML = `
-                        <h3>${package.name}</h3>
-                        <p>${key === 'basic' ? 'This package includes:' : 'Everything in previous package, plus:'}</p>
-                        <ul>
-                            ${package.features.map(feature => `<li>${feature}</li>`).join('')}
-                        </ul>
-                        <p>- Max ${package.max_per_category} per category</p>
-                        <p>- Delivery: ${package.delivery_days} days</p>
-                        <p>- Price: $${package.price}</p>
-                        <input type="radio" id="${key}" name="package" value="${key}" onchange="updatePricing()" required>
-                        <label for="${key}">Select ${package.name}</label>
-                    `;
-                    grid.appendChild(card);
-                });
-            }
-
-            function populateVersions() {
-                const container = document.getElementById('versions-container');
-                priceConfig.minecraft_versions.forEach(version => {
-                    container.innerHTML += `
-                        <input type="radio" id="v${version}" name="version" value="v${version}" required>
-                        <label for="v${version}">${version}</label>
-                    `;
-                });
-            }
-
-            function updateExtraOptions() {
-                document.querySelector('label[for="remove-watermark"]').textContent += 
-                    ` ($${priceConfig.extras.remove_watermark})`;
-                document.querySelector('label[for="custom-logo-design"]').textContent += 
-                    ` ($${priceConfig.extras.custom_logo})`;
-            }
-
             function updatePricing() {
-                if (!priceConfig) return;
-
                 let total = 0;
                 const selectedPackage = document.querySelector('input[name="package"]:checked');
                 const fastDelivery = document.getElementById('fast-delivery').checked;
@@ -296,21 +272,30 @@
                 const customLogo = document.getElementById('custom-logo-design').checked;
 
                 if (selectedPackage) {
-                    const package = priceConfig.packages[selectedPackage.value];
-                    total += package.price;
-
-                    const fastDeliveryInfo = document.getElementById('fast-delivery-info');
-                    fastDeliveryInfo.textContent = 
-                        `${package.name}: $${package.fast_delivery.price} for ${package.fast_delivery.days} days`;
-                    
-                    if (fastDelivery) {
-                        total += package.fast_delivery.price;
+                    switch (selectedPackage.value) {
+                        case 'basic': total += 40; break;
+                        case 'standard': total += 100; break;
+                        case 'premium': total += 160; break;
                     }
                 }
 
-                if (removeWatermark) total += priceConfig.extras.remove_watermark;
-                if (customLogo) total += priceConfig.extras.custom_logo;
+                const fastDeliveryInfo = document.getElementById('fast-delivery-info');
+                if (selectedPackage) {
+                    let price, days;
+                    switch (selectedPackage.value) {
+                        case 'basic': paclage = "Basic Package"; price = 40; days = 14; break;
+                        case 'standard': paclage = "Standard Package"; price = 70; days = 30; break;
+                        case 'premium': paclage = "Premium Package"; price = 100; days = 45; break;
+                    }
+                    fastDeliveryInfo.textContent = `${paclage}: $${price} for ${days} days`;
+                    if (fastDelivery) total += price;
+                } else {
+                    fastDeliveryInfo.textContent = 'Select a package first';
+                }
 
+                if (removeWatermark) total += 100;
+                if (customLogo) total += 40;
+    
                 document.getElementById('total-price').textContent = total;
             }
 
@@ -327,17 +312,16 @@
                 this.submit();
             });
 
-            // Load prices when page loads
-            window.addEventListener('load', loadPrices);
+            updatePricing();
         </script>
     </div>
-
-    <br><br><br><br>
+    <br>
+    <br>
+    <br>
+    <br>
 
     <footer>
-        <a href="../licence" style="color: white; text-decoration: none;">
-            &copy; 2025 Forge Scripting. All rights reserved.
-        </a>
+        <a href="/licence" style="color: white; text-decoration: none;">&copy; 2025 Forge Scripting. All rights reserved.</a>
     </footer>
 </body>
 </html>
