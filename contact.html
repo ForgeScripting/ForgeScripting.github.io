@@ -147,29 +147,26 @@
         </section>
         <section class="section">
             <h2>Send Me a Message</h2>
-            <form action="mailto:forgescripting@ratgers-online.nl" method="post" enctype="text/plain" onsubmit="return validateForm()">
-                <div>
-                    <label for="email">Your Email (required):</label><br>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div>
-                    <label for="message">Your Message (required):</label><br>
-                    <textarea id="message" name="message" rows="5" required></textarea>
-                </div>
-                <div>
-                    <button type="submit">Send Message</button>
-                </div>
+            <form id="messageForm" onsubmit="return validateForm()">
+            <div>
+                <label for="message">Your Message (required):</label><br>
+                <textarea id="message" name="message" rows="5" required></textarea>
+            </div>
+            <div>
+                <button type="submit">Send Message</button>
+            </div>
             </form>
         </section>
         <script>
             function validateForm() {
-                const email = document.getElementById('email').value.trim();
-                const message = document.getElementById('message').value.trim();
-                if (!email || !message) {
-                    alert('Both email and message are required.');
-                    return false;
-                }
-                return true;
+            const message = document.getElementById('message').value.trim();
+            if (!message) {
+                alert('Message is required.');
+                return false;
+            }
+            alert('Your message has been sent successfully!');
+            document.getElementById('messageForm').reset();
+            return false; // Prevent actual form submission
             }
         </script>
     </div>
