@@ -18,6 +18,7 @@
             color: white;
             padding: 1em 0;
             text-align: center;
+            position: relative;
         }
 
         nav ul {
@@ -118,8 +119,12 @@
             float: right;
         }
         .cart-button {
+            position: absolute;
+            top: 30%;
+            right: 0px;
+            transform: translateY(-50%);
             cursor: pointer;
-            float: right;
+            padding: 20px;
         }
     </style>
 </head>
@@ -132,8 +137,8 @@
                 <li><a href="about">About</a></li>
                 <li><a href="contact">Contact</a></li>
                 <li><a href="services">Services</a></li>
-                <div class="cart-button"><img href="cart" src="assets/cart.png" alt="Cart Icon" width="32" height="32"></div>
             </ul>
+            <div class="cart-button"><img href="cart" src="assets/cart.png" alt="Cart Icon" width="32" height="32"></div>
         </nav>
     </header>
 
