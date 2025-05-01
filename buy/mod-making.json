@@ -1,0 +1,35 @@
+{
+    "packages": {
+        "basic": {
+            "name": "Basic Package",
+            "price": 40,
+            "delivery_days": 21,
+            "fast_delivery": {
+                "price": 40,
+                "days": 14
+            }
+        },
+        "standard": {
+            "name": "Standard Package",
+            "price": 100,
+            "delivery_days": 40,
+            "fast_delivery": {
+                "price": 70,
+                "days": 30
+            }
+        },
+        "premium": {
+            "name": "Premium Package",
+            "price": 160,
+            "delivery_days": 90,
+            "fast_delivery": {
+                "price": 100,
+                "days": 45
+            }
+        }
+    },
+    "extras": {
+        "remove_watermark": 100,
+        "custom_logo": 40
+    }
+}
