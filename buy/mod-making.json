@@ -2,7 +2,7 @@
     "basic": {
         "normal": {
             "normal": 40,
-            "discount": 20
+            "discount": 0
         },
         "fast_delivery": {
             "normal": 40,
