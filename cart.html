@@ -3,96 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forge Scripting - Add to cart</title>
+    <title>Forge Scripting - Contact</title>
     <style>
         body {
             font-family: sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
         }
-        .cart-item {
-            margin: 10px 0;
-            padding: 10px;
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1em 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .hero {
+            background-color: #ddd;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .hero a.button {
+            display: inline-block;
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .section h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
             border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
         }
-        .remove-btn {
-            color: red;
-            cursor: pointer;
-            float: right;
+
+        .card h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 0.5em 0;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
         }
     </style>
 </head>
 <body>
-    <h1>Your Cart</h1>
-    <div id="cart-container"></div>
+    <header>
+        <h1>Forge Scripting</h1>
+        <nav>
+            <ul>
+                <li><a href="index">Home</a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="contact">Contact</a></li>
+                <li><a href="services">Services</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    <script>
-        function getCookie(name) {
-            try {
-                const value = `; ${document.cookie}`;
-                const parts = value.split(`; ${name}=`);
-                if (parts.length === 2) {
-                    const cookieValue = parts.pop().split(';').shift();
-                    return cookieValue ? JSON.parse(decodeURIComponent(cookieValue)) : [];
+    <section class="hero">
+        <h1>Contact</h1>
+        <p>Here you'll find contact with me.</p>
+    </section>
+
+    <div class="container">
+        <section class="section">
+            <div id="cart-container"></div>
+
+            <script>
+                function getCookie(name) {
+                    try {
+                        const value = `; ${document.cookie}`;
+                        const parts = value.split(`; ${name}=`);
+                        if (parts.length === 2) {
+                            const cookieValue = parts.pop().split(';').shift();
+                            return cookieValue ? JSON.parse(decodeURIComponent(cookieValue)) : [];
+                        }
+                        return [];
+                    } catch (e) {
+                        console.error('Error parsing cookie:', e);
+                        return [];
+                    }
                 }
-                return [];
-            } catch (e) {
-                console.error('Error parsing cookie:', e);
-                return [];
-            }
-        }
-
-        function setCookie(name, value) {
-            try {
-                const encodedValue = encodeURIComponent(JSON.stringify(value));
-                document.cookie = `${name}=${encodedValue}; path=/; max-age=86400`; // 24 hours
-            } catch (e) {
-                console.error('Error setting cookie:', e);
-            }
-        }
-
-        function removeFromCart(index) {
-            let cart = getCookie('cart');
-            if (Array.isArray(cart)) {
-                cart.splice(index, 1);
-                setCookie('cart', cart);
-                displayCart();
-            }
-        }
-
-        function displayCart() {
-            const container = document.getElementById('cart-container');
-            const cart = getCookie('cart');
             
-            if (!Array.isArray(cart) || cart.length === 0) {
-                container.innerHTML = '<p>Your cart is empty</p>';
-                return;
-            }
-
-            let html = '';
-            cart.forEach((item, index) => {
-                html += `
-                    <div class="cart-item">
-                        <span class="remove-btn" onclick="removeFromCart(${index})">❌</span>
-                        <h2>Package: ${item.package || 'Not specified'}</h2>
-                        <h3>Options:</h3>
-                        <ul>
-                            ${item.fastDelivery ? '<li>Fast Delivery</li>' : ''}
-                            ${item.removeWatermark ? '<li>Remove Watermark</li>' : ''}
-                            ${item.customLogo ? '<li>Custom Logo</li>' : ''}
-                        </ul>
-                        <p>Description: ${item.description || 'No description'}</p>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        window.onload = function() {
-            displayCart();
-        };
-    </script>
-
-    <p><a href="/index.html">Back to Home</a></p>
-    <p><a href="/services">Add Another Mod</a></p>
+                function setCookie(name, value) {
+                    try {
+                        const encodedValue = encodeURIComponent(JSON.stringify(value));
+                        document.cookie = `${name}=${encodedValue}; path=/; max-age=86400`; // 24 hours
+                    } catch (e) {
+                        console.error('Error setting cookie:', e);
+                    }
+                }
+            
+                function removeFromCart(index) {
+                    let cart = getCookie('cart');
+                    if (Array.isArray(cart)) {
+                        cart.splice(index, 1);
+                        setCookie('cart', cart);
+                        displayCart();
+                    }
+                }
+            
+                function displayCart() {
+                    const container = document.getElementById('cart-container');
+                    const cart = getCookie('cart');
+                    
+                    if (!Array.isArray(cart) || cart.length === 0) {
+                        container.innerHTML = '<p>Your cart is empty</p>';
+                        return;
+                    }
+                
+                    let html = '';
+                    cart.forEach((item, index) => {
+                        html += `
+                            <div class="cart-item">
+                                <span class="remove-btn" onclick="removeFromCart(${index})">❌</span>
+                                <h2>Package: ${item.package || 'Not specified'}</h2>
+                                <h3>Options:</h3>
+                                <ul>
+                                    ${item.fastDelivery ? '<li>Fast Delivery</li>' : ''}
+                                    ${item.removeWatermark ? '<li>Remove Watermark</li>' : ''}
+                                    ${item.customLogo ? '<li>Custom Logo</li>' : ''}
+                                </ul>
+                                <p>Description: ${item.description || 'No description'}</p>
+                            </div>
+                        `;
+                    });
+                    container.innerHTML = html;
+                }
+            
+                window.onload = function() {
+                    displayCart();
+                };
+            </script>
+        </section>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <footer>
+        <p>&copy; 2025 My Website. All rights reserved.</p>
+    </footer>
 </body>
 </html>
