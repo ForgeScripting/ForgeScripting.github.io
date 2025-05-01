@@ -16,7 +16,7 @@
         },
         "fast_delivery": {
             "normal": 70,
-            "discount": 1
+            "discount": 2
         }
     },
     "premium": {
@@ -26,7 +26,7 @@
         },
         "fast_delivery": {
             "normal": 100,
-            "discount": 1
+            "discount": 3
         }
     },
     "extra": {
