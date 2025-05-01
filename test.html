@@ -8,7 +8,7 @@
   <button id="checkout-button">Buy Now</button>
 
   <script>
-    const stripe = Stripe('pk_test_YourPublicKeyHere');
+    const stripe = Stripe(process.env.STRIPE_PUBLIC_KEY);
 
     document.getElementById('checkout-button').addEventListener('click', () => {
       fetch('https://your-netlify-backend.netlify.app/.netlify/functions/create-checkout-session', {
