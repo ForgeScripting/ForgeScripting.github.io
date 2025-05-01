@@ -8,5 +8,35 @@
             "normal": 40,
             "discount": 0
         }
+    },
+    "standard": {
+        "normal": {
+            "normal": 100,
+            "discount": 0
+        },
+        "fast_delivery": {
+            "normal": 70,
+            "discount": 0
+        }
+    },
+    "premium": {
+        "normal": {
+            "normal": 160,
+            "discount": 0
+        },
+        "fast_delivery": {
+            "normal": 100,
+            "discount": 0
+        }
+    },
+    "extra": {
+        "remove_watermark": {
+            "normal": 100,
+            "discount": 0
+        },
+        "custom_logo": {
+            "normal": 40,
+            "discount": 0
+        }
     }
 }
