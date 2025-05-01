@@ -123,8 +123,8 @@
     </header>
 
     <section class="hero">
-        <h1>Contact</h1>
-        <p>Here you'll find contact with me.</p>
+        <h1>Cart</h1>
+        <p>Here you'll find the item that you have bought.</p>
     </section>
 
     <div class="container">
@@ -168,7 +168,7 @@
                 function displayCart() {
                     const container = document.getElementById('cart-container');
                     const cart = getCookie('cart');
-                    
+
                     if (!Array.isArray(cart) || cart.length === 0) {
                         container.innerHTML = '<p>Your cart is empty</p>';
                         return;
