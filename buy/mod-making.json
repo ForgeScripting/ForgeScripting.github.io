@@ -2,41 +2,41 @@
     "basic": {
         "normal": {
             "normal": 40,
-            "discount": 1
+            "discount": 20
         },
         "fast_delivery": {
             "normal": 40,
-            "discount": 2
+            "discount": 0
         }
     },
     "standard": {
         "normal": {
             "normal": 100,
-            "discount": 3
+            "discount": 0
         },
         "fast_delivery": {
             "normal": 70,
-            "discount": 4
+            "discount": 0
         }
     },
     "premium": {
         "normal": {
             "normal": 160,
-            "discount": 5
+            "discount": 0
         },
         "fast_delivery": {
             "normal": 100,
-            "discount": 6
+            "discount": 0
         }
     },
     "extra": {
         "remove_watermark": {
             "normal": 100,
-            "discount": 7
+            "discount": 0
         },
         "custom_logo": {
             "normal": 40,
-            "discount": 8
+            "discount": 0
         }
     }
 }
