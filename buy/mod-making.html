@@ -277,65 +277,80 @@
             }
 
             function updatePricing() {
+                if (!priceConfig) return;
+
                 let total = 0;
                 const selectedPackage = document.querySelector('input[name="package"]:checked');
+                const fastDelivery = document.getElementById('fast-delivery')?.checked || false;
+                const removeWatermark = document.getElementById('remove-watermark')?.checked || false;
+                const customLogo = document.getElementById('custom-logo-design')?.checked || false;
 
-                const fastDelivery = document.getElementById('fast-delivery').checked;
-                const removeWatermark = document.getElementById('remove-watermark').checked;
-                const customLogo = document.getElementById('custom-logo-design').checked;
-
-                const fastDeliveryInfo = document.getElementById('fast-delivery-info');
-
-                basicPrice = [priceConfig.basic.normal.normal, priceConfig.basic.normal.discount];
-                standardPrice = [priceConfig.standard.normal.normal, priceConfig.standard.normal.discount];
-                premiumPrice = [priceConfig.premium.normal.normal, priceConfig.premium.normal.discount];
-
-                basicPriceFast = [priceConfig.basic.fast_delivery.normal, priceConfig.basic.fast_delivery.discount];
-                standardPriceFast = [priceConfig.standard.fast_delivery.normal, priceConfig.standard.fast_delivery.discount];
-                premiumPriceFast = [priceConfig.premium.fast_delivery.normal, priceConfig.premium.fast_delivery.discount];
-
-                removeWatermarkPrice = [priceConfig.extra.remove_watermark.normal, priceConfig.extra.remove_watermark.discount];
-                customLogoPrice = [priceConfig.extra.custom_logo.normal, priceConfig.extra.custom_logo.discount];
-
-                if (selectedPackage) {
-                    switch (selectedPackage.value) {
-                        case 'basic': total += basicPrice[1] == 0 ? basicPrice[0] : basicPrice[1]; break;
-                        case 'standard': total += standardPrice[1] == 0 ? standardPrice[0] : standardPrice[1]; break;
-                        case 'premium': total += premiumPrice[1] == 0 ? premiumPrice[0] : premiumPrice[1]; break;
-                    }
-                }
-
-                if (selectedPackage) {
-                    let price, days;
-                    switch (selectedPackage.value) {
-                        case 'basic': paclage = "Basic Package"; price = basicPriceFast[1] == 0 ? basicPriceFast[0] : basicPriceFast[1]; days = 14; break;
-                        case 'standard': paclage = "Standard Package"; price = basicPriceFast[1] == 0 ? basicPriceFast[0] : basicPriceFast[1]; days = 30; break;
-                        case 'premium': paclage = "Premium Package"; price = basicPriceFast[1] == 0 ? basicPriceFast[0] : basicPriceFast[1]; days = 45; break;
-                    }
-                    fastDeliveryInfo.textContent = `${paclage}: $${price} for ${days} days`;
-                    if (fastDelivery) total += price;
-                } else {
-                    fastDeliveryInfo.textContent = 'Select a package first';
-                }
-
-                if (removeWatermark) total += removeWatermarkPrice[1] == 0 ? removeWatermarkPrice[0] : removeWatermarkPrice[1];
-                if (customLogo) total += customLogoPrice[1] == 0 ? customLogoPrice[0] : customLogoPrice[1];
+                try {
+                    // Get prices from config
+                    basicPrice = [priceConfig.basic.normal.normal, priceConfig.basic.normal.discount];
+                    standardPrice = [priceConfig.standard.normal.normal, priceConfig.standard.normal.discount];
+                    premiumPrice = [priceConfig.premium.normal.normal, priceConfig.premium.normal.discount];
                 
-                document.getElementById('basic-package-info-disc').textContent = basicPrice[1] == 0 ? "" : basicPrice[0] + " ";
-                document.getElementById('basic-package-info').textContent = basicPrice[1] == 0 ? basicPrice[0] : basicPrice[1];
-                document.getElementById('standard-package-info-disc').textContent = standardPrice[1] == 0 ? "" : standardPrice[0] + " ";
-                document.getElementById('standard-package-info').textContent = standardPrice[1] == 0 ? standardPrice[0] : standardPrice[1];
-                document.getElementById('premium-package-info-disc').textContent = premiumPrice[1] == 0 ? "" : premiumPrice[0] + " ";
-                document.getElementById('premium-package-info').textContent = premiumPrice[1] == 0 ? premiumPrice[0] : premiumPrice[1];
-
-                document.getElementById('remove-watermark-info-disc').textContent = removeWatermarkPrice[1] == 0 ? "" : removeWatermarkPrice[0] + " ";
-                document.getElementById('remove-watermark-info').textContent = removeWatermarkPrice[1] == 0 ? removeWatermarkPrice[0] : removeWatermarkPrice[1];
-                document.getElementById('custom-logo-design-info-disc').textContent = customLogoPrice[1] == 0 ? "" : customLogoPrice[0] + " ";
-                document.getElementById('custom-logo-design-info').textContent = customLogoPrice[1] == 0 ? customLogoPrice[0] : customLogoPrice[1];
-
-                document.getElementById('total-price').textContent = total;
+                    basicPriceFast = [priceConfig.basic.fast_delivery.normal, priceConfig.basic.fast_delivery.discount];
+                    standardPriceFast = [priceConfig.standard.fast_delivery.normal, priceConfig.standard.fast_delivery.discount];
+                    premiumPriceFast = [priceConfig.premium.fast_delivery.normal, priceConfig.premium.fast_delivery.discount];
+                
+                    removeWatermarkPrice = [priceConfig.extra.remove_watermark.normal, priceConfig.extra.remove_watermark.discount];
+                    customLogoPrice = [priceConfig.extra.custom_logo.normal, priceConfig.extra.custom_logo.discount];
+                
+                    // Update package prices
+                    updateElementText('basic-package-info-disc', basicPrice[1] == 0 ? "" : `$${basicPrice[0]} `);
+                    updateElementText('basic-package-info', `$${basicPrice[1] == 0 ? basicPrice[0] : basicPrice[1]}`);
+                    updateElementText('standard-package-info-disc', standardPrice[1] == 0 ? "" : `$${standardPrice[0]} `);
+                    updateElementText('standard-package-info', `$${standardPrice[1] == 0 ? standardPrice[0] : standardPrice[1]}`);
+                    updateElementText('premium-package-info-disc', premiumPrice[1] == 0 ? "" : `$${premiumPrice[0]} `);
+                    updateElementText('premium-package-info', `$${premiumPrice[1] == 0 ? premiumPrice[0] : premiumPrice[1]}`);
+                
+                    // Update extra options prices
+                    updateElementText('remove-watermark-info-disc', removeWatermarkPrice[1] == 0 ? "" : `$${removeWatermarkPrice[0]} `);
+                    updateElementText('remove-watermark-info', `$${removeWatermarkPrice[1] == 0 ? removeWatermarkPrice[0] : removeWatermarkPrice[1]}`);
+                    updateElementText('custom-logo-design-info-disc', customLogoPrice[1] == 0 ? "" : `$${customLogoPrice[0]} `);
+                    updateElementText('custom-logo-design-info', `$${customLogoPrice[1] == 0 ? customLogoPrice[0] : customLogoPrice[1]}`);
+                
+                    // Calculate total
+                    if (selectedPackage) {
+                        switch (selectedPackage.value) {
+                            case 'basic': total += basicPrice[1] == 0 ? basicPrice[0] : basicPrice[1]; break;
+                            case 'standard': total += standardPrice[1] == 0 ? standardPrice[0] : standardPrice[1]; break;
+                            case 'premium': total += premiumPrice[1] == 0 ? premiumPrice[0] : premiumPrice[1]; break;
+                        }
+                    
+                        // Fast delivery calculation
+                        const fastDeliveryInfo = document.getElementById('fast-delivery-info');
+                        if (fastDeliveryInfo) {
+                            let price, days, packageName;
+                            switch (selectedPackage.value) {
+                                case 'basic': packageName = "Basic Package"; price = basicPriceFast[1] == 0 ? basicPriceFast[0] : basicPriceFast[1]; days = 14; break;
+                                case 'standard': packageName = "Standard Package"; price = standardPriceFast[1] == 0 ? standardPriceFast[0] : standardPriceFast[1]; days = 30; break;
+                                case 'premium': packageName = "Premium Package"; price = premiumPriceFast[1] == 0 ? premiumPriceFast[0] : premiumPriceFast[1]; days = 45; break;
+                            }
+                            fastDeliveryInfo.textContent = `${packageName}: $${price} for ${days} days`;
+                            if (fastDelivery) total += price;
+                        }
+                    }
+                
+                    if (removeWatermark) total += removeWatermarkPrice[1] == 0 ? removeWatermarkPrice[0] : removeWatermarkPrice[1];
+                    if (customLogo) total += customLogoPrice[1] == 0 ? customLogoPrice[0] : customLogoPrice[1];
+                
+                    updateElementText('total-price', total);
+                } catch (error) {
+                    console.error('Error updating prices:', error);
+                }
             }
 
+            // Helper function to safely update element text
+            function updateElementText(elementId, text) {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.textContent = text;
+                }
+            }
+            
             document.getElementById('modRequestForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 if (!document.querySelector('input[name="package"]:checked')) {
