@@ -307,15 +307,15 @@
                     updateElementText('basic-package-info-disc', basicPrice[1] == 0 ? "" : `${moneyType}${basicPrice[0]}`);
                     updateElementText('basic-package-info', basicPrice[1] == 0 ? moneyType + basicPrice[0] : ` ${moneyType}` + basicPrice[1]);
                     updateElementText('standard-package-info-disc', standardPrice[1] == 0 ? "" : `${moneyType}${standardPrice[0]}`);
-                    updateElementText('standard-package-info', standardPrice[1] == 0 ? moneyType + standardPrice[0] : ` ${moneyType}` + standardPrice[1]);
+                    updateElementText('standard-package-info', standardPrice[1] == 0 ? moneyType + standardPrice[0] : ` ${moneyType}${standardPrice[1]}`);
                     updateElementText('premium-package-info-disc', premiumPrice[1] == 0 ? "" : `${moneyType}${premiumPrice[0]}`);
-                    updateElementText('premium-package-info', premiumPrice[1] == 0 ? moneyType + premiumPrice[0] : ` ${moneyType}` + premiumPrice[1]);
+                    updateElementText('premium-package-info', premiumPrice[1] == 0 ? moneyType + premiumPrice[0] : ` ${moneyType}${premiumPrice[1]}`);
                 
                     // Update extra options prices
                     updateElementText('remove-watermark-info-disc', removeWatermarkPrice[1] == 0 ? "" : `${moneyType}${removeWatermarkPrice[0]}`);
-                    updateElementText('remove-watermark-info', removeWatermarkPrice[1] == 0 ? moneyType + removeWatermarkPrice[0] : ` ${moneyType}` + removeWatermarkPrice[1]);
+                    updateElementText('remove-watermark-info', removeWatermarkPrice[1] == 0 ? moneyType + removeWatermarkPrice[0] : ` ${moneyType}${removeWatermarkPrice[1]}`);
                     updateElementText('custom-logo-design-info-disc', customLogoPrice[1] == 0 ? "" : `${moneyType}${customLogoPrice[0]}`);
-                    updateElementText('custom-logo-design-info', customLogoPrice[1] == 0 ? moneyType + customLogoPrice[0] : ` ${moneyType}` + customLogoPrice[1]);
+                    updateElementText('custom-logo-design-info', customLogoPrice[1] == 0 ? moneyType + customLogoPrice[0] : ` ${moneyType}${customLogoPrice[1]}`);
                 
                     // Calculate total
                     if (selectedPackage) {
