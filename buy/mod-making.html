@@ -326,9 +326,9 @@
                         if (fastDeliveryInfo) {
                             let price, days, packageName;
                             switch (selectedPackage.value) {
-                                case 'basic': packageName = "Basic Package"; price = basicPriceFast[1] == 0 ? basicPriceFast[0] : " " + basicPriceFast[1]; days = 14; break;
-                                case 'standard': packageName = "Standard Package"; price = standardPriceFast[1] == 0 ? standardPriceFast[0] : " " + standardPriceFast[1]; days = 30; break;
-                                case 'premium': packageName = "Premium Package"; price = premiumPriceFast[1] == 0 ? premiumPriceFast[0] : " " + premiumPriceFast[1]; days = 45; break;
+                                case 'basic': packageName = "Basic Package"; price = basicPriceFast[1] == 0 ? basicPriceFast[0] : basicPriceFast[1]; days = 14; break;
+                                case 'standard': packageName = "Standard Package"; price = standardPriceFast[1] == 0 ? standardPriceFast[0] : standardPriceFast[1]; days = 30; break;
+                                case 'premium': packageName = "Premium Package"; price = premiumPriceFast[1] == 0 ? premiumPriceFast[0] : premiumPriceFast[1]; days = 45; break;
                             }
                             updateElementText('fast-delivery-info-disc', customLogoPrice[1] == 0 ? "" : `$${customLogoPrice[0]}`);
                             fastDeliveryInfo.textContent = `$${price} for ${days} days for ${packageName}`;
