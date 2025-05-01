@@ -299,6 +299,8 @@
                 
                     removeWatermarkPrice = [priceConfig.extra.remove_watermark.normal, priceConfig.extra.remove_watermark.discount];
                     customLogoPrice = [priceConfig.extra.custom_logo.normal, priceConfig.extra.custom_logo.discount];
+
+                    console.debug(basicPrice, standardPrice, premiumPrice, basicPriceFast, standardPriceFast, premiumPriceFast, removeWatermarkPrice, customLogoPrice)
                 
                     // Update package prices
                     updateElementText('basic-package-info-disc', basicPrice[1] == 0 ? "" : `$${basicPrice[0]}`);
