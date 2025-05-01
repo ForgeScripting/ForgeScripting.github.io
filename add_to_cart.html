@@ -3,21 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forge Scripting - Add to cart</title>
+    <title>Adding item...</title>
     <style>
         body {
             font-family: sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
         }
-        .cart-item {
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
-        .remove-btn {
-            color: red;
-            cursor: pointer;
-            float: right;
+        
+        footer {
+            text-align: center;
+            padding: 0.5em 0;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
         }
     </style>
 </head>
@@ -58,5 +61,8 @@
             window.location.href = '/cart';
         };
     </script>
+    <footer>
+        <a href="/licence">&copy; 2025 Forge Scripting. All rights reserved.</a>
+    </footer>
 </body>
 </html>
