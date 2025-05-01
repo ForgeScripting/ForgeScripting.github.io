@@ -270,7 +270,7 @@
             async function loadPrices() {
                 try {
                     // Fix the path to be relative to current directory
-                    const response = await fetch('../config/prices.json');
+                    const response = await fetch('/buy/mod-making.json');
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
