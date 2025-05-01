@@ -181,7 +181,7 @@
                         </ul>
                         <p>- Max 10 per category</p>
                         <p>- Delivery: 21 days</p>
-                        <p>- Price: $40</p>
+                        <p>- Price: <span id="basic-package-info">Loading...</span></p>
                         <input type="radio" id="basic" name="package" value="basic" onchange="updatePricing()" required>
                         <label for="basic">Select Basic Package</label>
                     </div>
@@ -195,7 +195,7 @@
                         </ul>
                         <p>- Max 20 per category</p>
                         <p>- Delivery: 40 days</p>
-                        <p>- Price: $100</p>
+                        <p>- Price: <span id="standard-package-info">Loading...</span></p>
                         <input type="radio" id="standard" name="package" value="standard" onchange="updatePricing()" required>
                         <label for="standard">Select Standard Package</label>
                     </div>
@@ -209,7 +209,7 @@
                         </ul>
                         <p>- Max 45 per category</p>
                         <p>- Delivery: 90 days</p>
-                        <p>- Price: $160</p>
+                        <p>- Price: <span id="premium-package-info-disc"></span><span id="premium-package-info">Loading...</span></p>
                         <input type="radio" id="premium" name="package" value="premium" onchange="updatePricing()" required>
                         <label for="premium">Select Premium Package</label>
                     </div>
@@ -247,12 +247,12 @@
 
                 <div class="option-group">
                     <input type="checkbox" id="remove-watermark" name="remove-watermark" onchange="updatePricing()">
-                    <label for="remove-watermark">Remove ForgeScripting watermark ($100)</label>
+                    <label for="remove-watermark">Remove ForgeScripting watermark (<span id="remove-watermark-info-disc"></span><span id="remove-watermark-info">Loading...</span>)</label>
                 </div>
 
                 <div class="option-group">
                     <input type="checkbox" id="custom-logo-design" name="custom-logo-design" onchange="updatePricing()">
-                    <label for="custom-logo-design">Custom logo design ($40)</label>
+                    <label for="custom-logo-design">Custom logo design (<span id="custom-logo-design-info-disc" style="text-decoration: line-through;"></span><span id="custom-logo-design-info">Loading...</span>)</label>
                 </div>
 
                 <div class="total-price">
@@ -264,28 +264,53 @@
         </form>
 
         <script>
+            let priceConfig;
+
+            async function loadPrices() {
+                try {
+                    const response = await fetch('/buy/mod-making.json');
+                    priceConfig = await response.json();
+                    updatePricing();
+                } catch (error) {
+                    console.error('Error loading prices:', error);
+                }
+            }
+
             function updatePricing() {
                 let total = 0;
                 const selectedPackage = document.querySelector('input[name="package"]:checked');
+
                 const fastDelivery = document.getElementById('fast-delivery').checked;
                 const removeWatermark = document.getElementById('remove-watermark').checked;
                 const customLogo = document.getElementById('custom-logo-design').checked;
 
+                const fastDeliveryInfo = document.getElementById('fast-delivery-info');
+
+                basicPrice = [priceConfig.basic.normal.normal, priceConfig.basic.normal.discount];
+                standardPrice = [priceConfig.standard.normal.normal, priceConfig.standard.normal.discount];
+                premiumPrice = [priceConfig.premium.normal.normal, priceConfig.premium.normal.discount];
+
+                basicPriceFast = [priceConfig.basic.fast_delivery.normal, priceConfig.basic.fast_delivery.discount];
+                standardPriceFast = [priceConfig.standard.fast_delivery.normal, priceConfig.standard.fast_delivery.discount];
+                premiumPriceFast = [priceConfig.premium.fast_delivery.normal, priceConfig.premium.fast_delivery.discount];
+
+                removeWatermarkPrice = [priceConfig.extra.remove_watermark.normal, priceConfig.extra.remove_watermark.discount];
+                customLogoPrice = [priceConfig.extra.custom_logo.normal, priceConfig.extra.custom_logo.discount];
+
                 if (selectedPackage) {
                     switch (selectedPackage.value) {
-                        case 'basic': total += 40; break;
-                        case 'standard': total += 100; break;
-                        case 'premium': total += 160; break;
+                        case 'basic': total += basicPrice[1] == 0 ? basicPrice[0] : basicPrice[1]; break;
+                        case 'standard': total += standardPrice[1] == 0 ? standardPrice[0] : standardPrice[1]; break;
+                        case 'premium': total += premiumPrice[1] == 0 ? premiumPrice[0] : premiumPrice[1]; break;
                     }
                 }
 
-                const fastDeliveryInfo = document.getElementById('fast-delivery-info');
                 if (selectedPackage) {
                     let price, days;
                     switch (selectedPackage.value) {
-                        case 'basic': paclage = "Basic Package"; price = 40; days = 14; break;
-                        case 'standard': paclage = "Standard Package"; price = 70; days = 30; break;
-                        case 'premium': paclage = "Premium Package"; price = 100; days = 45; break;
+                        case 'basic': paclage = "Basic Package"; price = basicPriceFast[1] == 0 ? basicPriceFast[0] : basicPriceFast[1]; days = 14; break;
+                        case 'standard': paclage = "Standard Package"; price = basicPriceFast[1] == 0 ? basicPriceFast[0] : basicPriceFast[1]; days = 30; break;
+                        case 'premium': paclage = "Premium Package"; price = basicPriceFast[1] == 0 ? basicPriceFast[0] : basicPriceFast[1]; days = 45; break;
                     }
                     fastDeliveryInfo.textContent = `${paclage}: $${price} for ${days} days`;
                     if (fastDelivery) total += price;
@@ -293,9 +318,21 @@
                     fastDeliveryInfo.textContent = 'Select a package first';
                 }
 
-                if (removeWatermark) total += 100;
-                if (customLogo) total += 40;
-    
+                if (removeWatermark) total += removeWatermarkPrice[1] == 0 ? removeWatermarkPrice[0] : removeWatermarkPrice[1];
+                if (customLogo) total += customLogoPrice[1] == 0 ? customLogoPrice[0] : customLogoPrice[1];
+                
+                document.getElementById('basic-package-info-disc').textContent = basicPrice[1] == 0 ? "" : basicPrice[0] + " ";
+                document.getElementById('basic-package-info').textContent = basicPrice[1] == 0 ? basicPrice[0] : basicPrice[1];
+                document.getElementById('standard-package-info-disc').textContent = standardPrice[1] == 0 ? "" : standardPrice[0] + " ";
+                document.getElementById('standard-package-info').textContent = standardPrice[1] == 0 ? standardPrice[0] : standardPrice[1];
+                document.getElementById('premium-package-info-disc').textContent = premiumPrice[1] == 0 ? "" : premiumPrice[0] + " ";
+                document.getElementById('premium-package-info').textContent = premiumPrice[1] == 0 ? premiumPrice[0] : premiumPrice[1];
+
+                document.getElementById('remove-watermark-info-disc').textContent = removeWatermarkPrice[1] == 0 ? "" : removeWatermarkPrice[0] + " ";
+                document.getElementById('remove-watermark-info').textContent = removeWatermarkPrice[1] == 0 ? removeWatermarkPrice[0] : removeWatermarkPrice[1];
+                document.getElementById('custom-logo-design-info-disc').textContent = customLogoPrice[1] == 0 ? "" : customLogoPrice[0] + " ";
+                document.getElementById('custom-logo-design-info').textContent = customLogoPrice[1] == 0 ? customLogoPrice[0] : customLogoPrice[1];
+
                 document.getElementById('total-price').textContent = total;
             }
 
@@ -312,7 +349,7 @@
                 this.submit();
             });
 
-            updatePricing();
+            window.addEventListener('load', loadPrices);
         </script>
     </div>
     <br>
