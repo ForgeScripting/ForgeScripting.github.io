@@ -149,27 +149,22 @@
             <h2>Send Me a Message</h2>
             <form id="messageForm" method="POST" action="https://formsubmit.co/forgescripting@ratgers-online.nl">
             <div>
-                <label for="name">Your Name*</label><br>
-                <input type="text" id="name" name="name" required>
+                <label for="name">Your Name <span style="color: red">*</span></label><br>
+                <input type="text" id="name" name="name" required><br><br>
             </div>
             <div>
-                <label for="email">Your Email*</label><br>
-                <input type="email" id="email" name="email" required>
+                <label for="email">Your Email <span style="color: red">*</span></label><br>
+                <input type="email" id="email" name="email" required><br><br>
             </div>
             <div>
-                <label for="message">Your Message*</label><br>
-                <textarea id="message" name="message" rows="5" required></textarea>
+                <label for="message">Your Message <span style="color: red">*</span></label><br>
+                <textarea id="message" name="message" rows="5" required></textarea><br><br>
             </div>
             <div>
                 <button type="submit">Send Message</button>
             </div>
             </form>
         </section>
-        <script>
-            document.getElementById('messageForm').addEventListener('submit', function() {
-            alert('Your message has been sent successfully!');
-            });
-        </script>
     </div>
     <br>
     <br>
