@@ -256,7 +256,7 @@
                 </div>
 
                 <div class="total-price">
-                    <h3>Total Price: <span id="total-price">0</span></h3>
+                    <h3>Total Price: <span id="total-price">Loading...</span></h3>
                 </div>
             </section>
 
@@ -269,11 +269,21 @@
 
             async function loadPrices() {
                 try {
-                    const response = await fetch('/buy/mod-making.json');
-                    priceConfig = await response.json();
+                    // Fix the path to be relative to current directory
+                    const response = await fetch('../config/prices.json');
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    console.log('Loaded prices:', data); // Debug log
+                    priceConfig = data;
                     updatePricing();
                 } catch (error) {
                     console.error('Error loading prices:', error);
+                    // Show error on price elements
+                    document.querySelectorAll('[id$="-info"]').forEach(element => {
+                        element.textContent = 'Error loading prices';
+                    });
                 }
             }
 
