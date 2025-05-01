@@ -283,9 +283,9 @@
                 if (selectedPackage) {
                     let price, days;
                     switch (selectedPackage.value) {
-                        case 'basic': price = 40; days = 14; break;
-                        case 'standard': price = 70; days = 30; break;
-                        case 'premium': price = 100; days = 45; break;
+                        case 'basic': paclage = "Basic Package"; price = 40; days = 14; break;
+                        case 'standard': paclage = "Standard Package"; price = 70; days = 30; break;
+                        case 'premium': paclage = "Premium Package"; price = 100; days = 45; break;
                     }
                     fastDeliveryInfo.textContent = `$${price} for ${days} days`;
                     if (fastDelivery) total += price;
