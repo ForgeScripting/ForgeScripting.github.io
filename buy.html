@@ -14,7 +14,7 @@
   <script>
     // Initialize Stripe after fetching the public key
     fetch('/netlify/functions/get-public-key.js')
-      .then(response => {response.json(); document.getElementById('ppp').textContent = response;})
+      .then(response => {response.json(); document.getElementById('ppp').textContent = response.json();})
       .then(data => {
         if (data.error) {
           throw new Error(data.message);
