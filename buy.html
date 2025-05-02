@@ -1,46 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stripe Checkout with GitHub Pages</title>
-  <script src="https://js.stripe.com/v3/"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy - Forge Scripting</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        .checkout-button {
+            background-color: #5cb85c;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+        .checkout-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .error {
+            color: red;
+            margin: 10px 0;
+            display: none;
+        }
+    </style>
 </head>
 <body>
-  <h1>Buy a Product</h1>
-  <button id="checkout-button">Checkout</button>
+    <div id="error-message" class="error"></div>
+    <button id="checkout-button" class="checkout-button">Checkout</button>
 
-  <script>
-    import { getPublicKey } from '/netlify/functions/get-public-key.js';
+    <script>
+        const checkoutButton = document.getElementById('checkout-button');
+        const errorMessage = document.getElementById('error-message');
 
-    if (getPublicKey[0]) {
-        console.error('Error fetching public key:', getPublicKey[1]);
-        throw new Error('Error fetching public key:', getPublicKey[1]);
-    }
+        async function initializeCheckout() {
+            try {
+                const response = await fetch('/.netlify/functions/get-public-key');
+                if (!response.ok) throw new Error('Failed to initialize checkout');
+                const data = await response.json();
+                
+                const stripe = Stripe(data.key);
 
-    var stripe = Stripe(getPublicKey[1]); // Replace with your Stripe Publishable Key
+                checkoutButton.addEventListener('click', async () => {
+                    checkoutButton.disabled = true;
+                    
+                    try {
+                        const response = await fetch('/.netlify/functions/create-checkout-session', {
+                            method: 'POST'
+                        });
+                        
+                        if (!response.ok) throw new Error('Failed to create checkout session');
+                        
+                        const session = await response.json();
+                        const result = await stripe.redirectToCheckout({
+                            sessionId: session.id
+                        });
 
-    var checkoutButton = document.getElementById('checkout-button');
-    checkoutButton.addEventListener('click', function () {
-      // Call your serverless function to create a checkout session
-      fetch('/create-checkout-session', {
-        method: 'POST',
-      })
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (sessionId) {
-        return stripe.redirectToCheckout({ sessionId: sessionId });
-      })
-      .then(function (result) {
-        if (result.error) {
-          alert(result.error.message);
+                        if (result.error) throw new Error(result.error.message);
+                        
+                    } catch (error) {
+                        errorMessage.textContent = error.message;
+                        errorMessage.style.display = 'block';
+                        checkoutButton.disabled = false;
+                    }
+                });
+            } catch (error) {
+                errorMessage.textContent = error.message;
+                errorMessage.style.display = 'block';
+            }
         }
-      })
-      .catch(function (error) {
-        console.error('Error:', error);
-      });
-    });
-  </script>
+
+        initializeCheckout();
+    </script>
 </body>
 </html>
