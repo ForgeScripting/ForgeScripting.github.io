@@ -1,1 +1,36 @@
-test
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stripe Checkout with GitHub Pages</title>
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <h1>Buy a Product</h1>
+  <button id="checkout-button">Checkout</button>
+
+  <script>
+    let stripe;
+    fetch('/.netlify/functions/get-publishable-key')
+        .then((res) => res.json())
+        .then((data) => {
+            stripe = Stripe(data.key); // Now the key is injected securely
+  
+            document.getElementById('checkout-button').addEventListener('click', function () {
+                fetch('/.netlify/functions/create-checkout-session', {
+                    method: 'POST',
+                })
+                .then((response) => response.json())
+                .then((sessionId) => stripe.redirectToCheckout({ sessionId }))
+                .then((result) => {
+                    if (result.error) {
+                        alert(result.error.message);
+                    }
+            })
+            .catch((error) => console.error('Error:', error));
+        });
+      });
+  </script>  
+</body>
+</html>
