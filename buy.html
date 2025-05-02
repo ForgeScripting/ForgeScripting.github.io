@@ -8,12 +8,13 @@
 </head>
 <body>
   <h1>Buy a Product</h1>
+  <p id="ppp"></p>
   <button id="checkout-button">Checkout</button>
 
   <script>
     // Initialize Stripe after fetching the public key
     fetch('/netlify/functions/get-public-key.js')
-      .then(response => {response.json(); console.log(response);})
+      .then(response => {response.json(); document.getElementById('ppp').textContent = response;})
       .then(data => {
         if (data.error) {
           throw new Error(data.message);
