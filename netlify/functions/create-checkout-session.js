@@ -1,7 +1,8 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-exports.handler = async () => {
+exports.handler = async (event, context) => {
   try {
+    // Create a new Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -9,9 +10,9 @@ exports.handler = async () => {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: 'Test Product',
+              name: 'Sample Product', // Your product name
             },
-            unit_amount: 2000, // $20.00
+            unit_amount: 2000, // Price in cents (2000 = $20.00)
           },
           quantity: 1,
         },
@@ -25,10 +26,10 @@ exports.handler = async () => {
       statusCode: 200,
       body: JSON.stringify({ sessionId: session.id }),
     };
-  } catch (error) {
+  } catch (err) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: error.message }),
+      body: JSON.stringify({ error: err.message }),
     };
   }
 };
