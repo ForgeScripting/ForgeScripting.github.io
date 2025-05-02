@@ -1,4 +1,17 @@
 exports.handler = async function(event, context) {
+  // Add OPTIONS handling for CORS
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'GET, OPTIONS'
+      },
+      body: ''
+    };
+  }
+
   try {
     const publishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
     
@@ -9,7 +22,10 @@ exports.handler = async function(event, context) {
           'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify([true, 'Missing STRIPE_PUBLISHABLE_KEY environment variable'])
+        body: JSON.stringify({
+          error: true,
+          message: 'Missing STRIPE_PUBLISHABLE_KEY environment variable'
+        })
       };
     }
 
@@ -19,7 +35,10 @@ exports.handler = async function(event, context) {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify([false, publishableKey])
+      body: JSON.stringify({
+        error: false,
+        key: publishableKey
+      })
     };
   } catch (error) {
     return {
@@ -28,7 +47,10 @@ exports.handler = async function(event, context) {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify([true, error.message])
+      body: JSON.stringify({
+        error: true,
+        message: error.message
+      })
     };
   }
 };
