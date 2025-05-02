@@ -1,6 +1,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-exports.handler = async function(event, context) {
+exports.handler = async (event, context) => {
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -9,21 +9,21 @@ exports.handler = async function(event, context) {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: 'Your Product',
+              name: 'Sample Product',
             },
-            unit_amount: 1000, // $10 in cents
+            unit_amount: 2000, // $20.00
           },
           quantity: 1,
         },
       ],
       mode: 'payment',
-      success_url: 'https://your-success-url.com',
-      cancel_url: 'https://your-cancel-url.com',
+      success_url: `${process.env.URL}/success.html`,
+      cancel_url: `${process.env.URL}/cancel.html`,
     });
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ id: session.id }),
+      body: JSON.stringify({ sessionId: session.id }),
     };
   } catch (err) {
     return {
