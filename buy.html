@@ -5,25 +5,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Stripe Checkout with Netlify</title>
   <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    .error {
+      color: red;
+      margin: 1em 0;
+    }
+  </style>
 </head>
 <body>
   <h1>Buy a Product</h1>
+  <div id="error-message" class="error" style="display: none;"></div>
   <button id="checkout-button">Checkout</button>
 
   <script>
-    fetch('/netlify/functions/get-public-key.js')
-      .then(res => res.json())
+    const errorDiv = document.getElementById('error-message');
+    
+    fetch('/.netlify/functions/get-publishable-key')
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to get Stripe key');
+        return res.json();
+      })
       .then(data => {
         const stripe = Stripe(data.key);
+        const checkoutButton = document.getElementById('checkout-button');
 
-        document.getElementById('checkout-button').addEventListener('click', () => {
-          fetch('/netlify/functions/create-checkout-session.js', {
+        checkoutButton.addEventListener('click', () => {
+          checkoutButton.disabled = true;
+          errorDiv.style.display = 'none';
+
+          fetch('/.netlify/functions/create-checkout-session', {
             method: 'POST',
           })
-            .then(res => res.json())
+            .then(res => {
+              if (!res.ok) throw new Error('Failed to create checkout session');
+              return res.json();
+            })
             .then(data => stripe.redirectToCheckout({ sessionId: data.sessionId }))
-            .catch(err => console.error('Checkout error:', err));
+            .catch(err => {
+              console.error('Checkout error:', err);
+              errorDiv.textContent = err.message;
+              errorDiv.style.display = 'block';
+              checkoutButton.disabled = false;
+            });
         });
+      })
+      .catch(err => {
+        console.error('Setup error:', err);
+        errorDiv.textContent = err.message;
+        errorDiv.style.display = 'block';
       });
   </script>
 </body>
