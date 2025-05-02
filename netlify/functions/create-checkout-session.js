@@ -18,8 +18,8 @@ exports.handler = async (event, context) => {
         },
       ],
       mode: 'payment',
-      success_url: `${process.env.URL}/success.html`,
-      cancel_url: `${process.env.URL}/cancel.html`,
+      success_url: `${process.env.URL}/success`,
+      cancel_url: `${process.env.URL}/cancel`,
     });
 
     return {
