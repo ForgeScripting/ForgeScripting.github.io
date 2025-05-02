@@ -20,7 +20,7 @@
   <script>
     const errorDiv = document.getElementById('error-message');
     
-    fetch('/netlify/functions/get-publishable-key.js')
+    fetch('/netlify/functions/get-public-key.js')
       .then(res => {
         if (!res.ok) throw new Error('Failed to get Stripe key');
         return res.json();
