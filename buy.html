@@ -11,29 +11,41 @@
   <button id="checkout-button">Checkout</button>
 
   <script>
-    var stripe = Stripe('your-publishable-key-here'); // Replace with your Stripe Publishable Key
-
-    var checkoutButton = document.getElementById('checkout-button');
-    checkoutButton.addEventListener('click', function () {
-      // Call your serverless function to create a checkout session
-      fetch('/create-checkout-session', {
-        method: 'POST',
-      })
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (sessionId) {
-        return stripe.redirectToCheckout({ sessionId: sessionId });
-      })
-      .then(function (result) {
-        if (result.error) {
-          alert(result.error.message);
+    // Initialize Stripe after fetching the public key
+    fetch('/netlify/functions/get-public-key.js')
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          throw new Error(data.message);
         }
+        return Stripe(data.key);
       })
-      .catch(function (error) {
-        console.error('Error:', error);
+      .then(stripe => {
+        const checkoutButton = document.getElementById('checkout-button');
+        checkoutButton.addEventListener('click', function () {
+          fetch('/netlify/functions/create-checkout-session.js', {
+            method: 'POST',
+          })
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (session) {
+            return stripe.redirectToCheckout({ sessionId: session.id });
+          })
+          .then(function (result) {
+            if (result.error) {
+              alert(result.error.message);
+            }
+          })
+          .catch(function (error) {
+            console.error('Error:', error);
+          });
+        });
+      })
+      .catch(error => {
+        console.error('Failed to initialize Stripe:', error);
+        document.getElementById('checkout-button').disabled = true;
       });
-    });
   </script>
 </body>
 </html>
