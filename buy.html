@@ -1,3 +1,4 @@
+buy.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +19,8 @@
         checkoutButton.addEventListener('click', function() {
             checkoutButton.disabled = true;
             
-            fetch('/netlify/functions/create-checkout-session.js', {
+            // Update this URL to your Netlify function URL
+            fetch('https://forgescripting.netlify.app/.netlify/functions/create-checkout-session', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
