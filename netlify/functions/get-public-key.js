@@ -5,27 +5,30 @@ exports.handler = async function(event, context) {
     if (!publishableKey) {
       return {
         statusCode: 500,
-        body: JSON.stringify({
-          error: 'Missing STRIPE_PUBLISHABLE_KEY environment variable'
-        })
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify([true, 'Missing STRIPE_PUBLISHABLE_KEY environment variable'])
       };
     }
 
     return {
       statusCode: 200,
       headers: {
+        'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        key: publishableKey
-      })
+      body: JSON.stringify([false, publishableKey])
     };
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({
-        error: error.message
-      })
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify([true, error.message])
     };
   }
 };
