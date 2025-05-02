@@ -1,39 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stripe Checkout with GitHub Pages</title>
-  <script src="https://js.stripe.com/v3/"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stripe Checkout</title>
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
-  <h1>Buy a Product</h1>
-  <button id="checkout-button">Checkout</button>
+    <h1>Buy a Product</h1>
+    <div id="error" style="color: red; display: none;"></div>
+    <button id="checkout-button">Checkout</button>
 
-  <script>
-    var stripe = Stripe('pk_test_51RK3DsPcWzqKbYdBZd8qk19B33BGbX1n8aoRhaNYPLEH8Rg1yB9Fq5b4CJfTfdxND3GuituRXHvpFIuH1Q9SmGDd00jzlBYKBJ'); // Replace with your Stripe Publishable Key
-
-    var checkoutButton = document.getElementById('checkout-button');
-    checkoutButton.addEventListener('click', function () {
-      // Call your serverless function to create a checkout session
-      fetch('/create-checkout-session', {
-        method: 'POST',
-      })
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (sessionId) {
-        return stripe.redirectToCheckout({ sessionId: sessionId });
-      })
-      .then(function (result) {
-        if (result.error) {
-          alert(result.error.message);
-        }
-      })
-      .catch(function (error) {
-        console.error('Error:', error);
-      });
-    });
-  </script>
+    <script>
+        const stripe = Stripe('pk_test_51RK3DsPcWzqKbYdBZd8qk19B33BGbX1n8aoRhaNYPLEH8Rg1yB9Fq5b4CJfTfdxND3GuituRXHvpFIuH1Q9SmGDd00jzlBYKBJ');
+        const checkoutButton = document.getElementById('checkout-button');
+        
+        checkoutButton.addEventListener('click', function() {
+            checkoutButton.disabled = true;
+            
+            fetch('/netlify/functions/create-checkout-session.js', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(session => {
+                return stripe.redirectToCheckout({ sessionId: session.id });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                checkoutButton.disabled = false;
+                const errorDiv = document.getElementById('error');
+                errorDiv.textContent = error.message;
+                errorDiv.style.display = 'block';
+            });
+        });
+    </script>
 </body>
 </html>
