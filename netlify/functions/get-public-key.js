@@ -1,4 +1,4 @@
-const handler = async () => {
+exports.handler = async function(event, context) {
     try {
         const publicKey = process.env.STRIPE_PUBLIC_KEY;
   
@@ -41,5 +41,3 @@ const handler = async () => {
         };
     }
 };
-  
-module.exports = { handler };
