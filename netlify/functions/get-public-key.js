@@ -1,17 +1,13 @@
-exports.handler = async () => {
+export function getPublicKey() {
   try {
     const publishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
     
     if (!publishableKey) {
-      throw new Error('Missing STRIPE_PUBLISHABLE_KEY environment variable');
+      return [true, 'Missing STRIPE_PUBLISHABLE_KEY environment variable'];
     }
 
-    return [false, publishableKey]
+    return [false, publishableKey];
   } catch (error) {
-    return [true, error.message]
+    return [true, error.message];
   }
-};
-
-export function getPublicKey() {
-  return "edit me";
 }
