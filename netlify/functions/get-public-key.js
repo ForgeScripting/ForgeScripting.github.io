@@ -6,18 +6,12 @@ exports.handler = async () => {
       throw new Error('Missing STRIPE_PUBLISHABLE_KEY environment variable');
     }
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        key: publishableKey,
-      }),
-    };
+    return [false, publishableKey]
   } catch (error) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        error: error.message,
-      }),
-    };
+    return [true, error.message]
   }
 };
+
+export function getPublicKey() {
+  return "edit me";
+}
