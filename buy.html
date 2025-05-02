@@ -3,45 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stripe Checkout</title>
-    <script src="https://js.stripe.com/v3/"></script>
+    <title>test</title>
 </head>
 <body>
-    <h1>Buy a Product</h1>
-    <div id="error" style="color: red; display: none;"></div>
-    <button id="checkout-button">Checkout</button>
-
-    <script>
-        const stripe = Stripe('pk_test_51RK3DsPcWzqKbYdBZd8qk19B33BGbX1n8aoRhaNYPLEH8Rg1yB9Fq5b4CJfTfdxND3GuituRXHvpFIuH1Q9SmGDd00jzlBYKBJ');
-        const checkoutButton = document.getElementById('checkout-button');
-        
-        checkoutButton.addEventListener('click', function() {
-            checkoutButton.disabled = true;
-            
-            // Update this URL to your Netlify function URL
-            fetch('https://forgescripting.github.io/netlify/functions/create-checkout-session', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(session => {
-                return stripe.redirectToCheckout({ sessionId: session.id });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                checkoutButton.disabled = false;
-                const errorDiv = document.getElementById('error');
-                errorDiv.textContent = error.message;
-                errorDiv.style.display = 'block';
-            });
-        });
-    </script>
+    <button id="buy-button">Buy Now (Test)</button>
 </body>
 </html>
