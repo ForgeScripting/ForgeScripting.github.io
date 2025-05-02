@@ -1,59 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Stripe Checkout with Netlify</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stripe Checkout with GitHub Pages</title>
   <script src="https://js.stripe.com/v3/"></script>
-  <style>
-    .error {
-      color: red;
-      margin: 1em 0;
-    }
-  </style>
 </head>
 <body>
   <h1>Buy a Product</h1>
-  <div id="error-message" class="error" style="display: none;"></div>
   <button id="checkout-button">Checkout</button>
 
   <script>
-    const errorDiv = document.getElementById('error-message');
-    
-    fetch('/netlify/functions/get-public-key.js')
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to get Stripe key');
-        return res.json();
-      })
-      .then(data => {
-        const stripe = Stripe(data.key);
-        const checkoutButton = document.getElementById('checkout-button');
+    import { getPublicKey } from '/netlify/functions/get-public-key.js';
 
-        checkoutButton.addEventListener('click', () => {
-          checkoutButton.disabled = true;
-          errorDiv.style.display = 'none';
+    if (getPublicKey[0]) {
+        console.error('Error fetching public key:', getPublicKey[1]);
+        throw new Error('Error fetching public key:', getPublicKey[1]);
+    }
 
-          fetch('/netlify/functions/create-checkout-session.js', {
-            method: 'POST',
-          })
-            .then(res => {
-              if (!res.ok) throw new Error('Failed to create checkout session');
-              return res.json();
-            })
-            .then(data => stripe.redirectToCheckout({ sessionId: data.sessionId }))
-            .catch(err => {
-              console.error('Checkout error:', err);
-              errorDiv.textContent = err.message;
-              errorDiv.style.display = 'block';
-              checkoutButton.disabled = false;
-            });
-        });
+    var stripe = Stripe(getPublicKey[1]); // Replace with your Stripe Publishable Key
+
+    var checkoutButton = document.getElementById('checkout-button');
+    checkoutButton.addEventListener('click', function () {
+      // Call your serverless function to create a checkout session
+      fetch('/create-checkout-session', {
+        method: 'POST',
       })
-      .catch(err => {
-        console.error('Setup error:', err);
-        errorDiv.textContent = err.message;
-        errorDiv.style.display = 'block';
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (sessionId) {
+        return stripe.redirectToCheckout({ sessionId: sessionId });
+      })
+      .then(function (result) {
+        if (result.error) {
+          alert(result.error.message);
+        }
+      })
+      .catch(function (error) {
+        console.error('Error:', error);
       });
+    });
   </script>
 </body>
 </html>
