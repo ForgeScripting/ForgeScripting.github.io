@@ -1,13 +1,31 @@
-export function getPublicKey() {
+exports.handler = async function(event, context) {
   try {
     const publishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
     
     if (!publishableKey) {
-      return [true, 'Missing STRIPE_PUBLISHABLE_KEY environment variable'];
+      return {
+        statusCode: 500,
+        body: JSON.stringify({
+          error: 'Missing STRIPE_PUBLISHABLE_KEY environment variable'
+        })
+      };
     }
 
-    return [false, publishableKey];
+    return {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        key: publishableKey
+      })
+    };
   } catch (error) {
-    return [true, error.message];
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        error: error.message
+      })
+    };
   }
-}
+};
