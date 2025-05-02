@@ -20,7 +20,7 @@
   <script>
     const errorDiv = document.getElementById('error-message');
     
-    fetch('/.netlify/functions/get-publishable-key')
+    fetch('/netlify/functions/get-publishable-key.js')
       .then(res => {
         if (!res.ok) throw new Error('Failed to get Stripe key');
         return res.json();
@@ -33,7 +33,7 @@
           checkoutButton.disabled = true;
           errorDiv.style.display = 'none';
 
-          fetch('/.netlify/functions/create-checkout-session', {
+          fetch('/netlify/functions/create-checkout-session.js', {
             method: 'POST',
           })
             .then(res => {
